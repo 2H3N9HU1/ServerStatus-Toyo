@@ -134,6 +134,14 @@ int CMain::HandleMessage(int ClientNetID, char *pMessage)
 			pClient->m_Stats.m_Uptime = rStart["uptime"].u.integer;
 		if(rStart["load"].type)
 			pClient->m_Stats.m_Load = rStart["load"].u.dbl;
+		if(rStart["tcp"].type)
+			pClient->m_Stats.m_tcpCount = rStart["tcp"].u.integer;
+		if(rStart["udp"].type)
+			pClient->m_Stats.m_udpCount = rStart["udp"].u.integer;
+		if(rStart["process"].type)
+			pClient->m_Stats.m_processCount = rStart["process"].u.integer;
+		if(rStart["thread"].type)
+			pClient->m_Stats.m_threadCount = rStart["thread"].u.integer;
 		if(rStart["network_rx"].type)
 			pClient->m_Stats.m_NetworkRx = rStart["network_rx"].u.integer;
 		if(rStart["network_tx"].type)
