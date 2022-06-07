@@ -136,6 +136,30 @@ def liuliang():
                     NET_OUT += int(netinfo[0][9])
     return NET_IN, NET_OUT
 
+def tupd():
+    '''
+    tcp, udp, process, thread count: for view ddcc attack , then send warning
+    :return:
+    '''
+    try:
+        if sys.platform.startswith("linux") is True:
+            t = int(os.popen('ss -t|wc -l').read()[:-1])-1
+            u = int(os.popen('ss -u|wc -l').read()[:-1])-1
+            p = int(os.popen('ps -ef|wc -l').read()[:-1])-2
+            d = int(os.popen('ps -eLf|wc -l').read()[:-1])-2
+        elif sys.platform.startswith("win") is True:
+            t = int(os.popen('netstat -an|find "TCP" /c').read()[:-1])-1
+            u = int(os.popen('netstat -an|find "UDP" /c').read()[:-1])-1
+            p = len(psutil.pids())
+            d = 0
+            # cpu is high, default: 0
+            # d = sum([psutil.Process(k).num_threads() for k in [x for x in psutil.pids()]])
+        else:
+            t,u,p,d = 0,0,0,0
+        return t,u,p,d
+    except:
+        return 0,0,0,0
+
 def get_network(ip_version):
 	if(ip_version == 4):
 		HOST = "ipv4.google.com"
@@ -211,6 +235,7 @@ if __name__ == '__main__':
 				array['network_tx'] = NetTx
 				array['network_in'] = NET_IN
 				array['network_out'] = NET_OUT
+				array['tcp'], array['udp'], array['process'], array['thread'] = tupd()
 
 				s.send("update " + json.dumps(array) + "\n")
 		except KeyboardInterrupt:
